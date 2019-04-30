@@ -3,23 +3,24 @@ unit CLIPS;
 interface
 
 uses
+  ctypes;
+
+const
 {$IFDEF WIN32}
-  Windows;
-{$ELSE}
-  Wintypes, WinProcs;
+  CLIPS_DYNAMIC_LIB = 'CLIPSDynamic32';
+{$ENDIF}
+{$IFDEF WIN64}
+  CLIPS_DYNAMIC_LIB = 'CLIPSDynamic64';
 {$ENDIF}
 
-{$IFNDEF CLIPSWin32_H}
-{$DEFINE CLIPSWin32_H}
-
-function __CreateEnvironment(): Pointer; cdecl; external {$ifdef windows}'CLIPSDynamic32'{$endif};
-procedure __DestroyEnvironment(env: Pointer); cdecl; external {$ifdef windows}'CLIPSDynamic32'{$endif};
-procedure __EnvClear(env: Pointer); cdecl; external {$ifdef windows}'CLIPSDynamic32'{$endif};
-procedure __EnvReset(env: Pointer); cdecl; external {$ifdef windows}'CLIPSDynamic32'{$endif};
-function __EnvRun(env: Pointer; run: LongInt): LongInt; cdecl; external {$ifdef windows}'CLIPSDynamic32'{$endif};
-function __EnvBuild(env: Pointer; benv: PChar): Integer; cdecl; external {$ifdef windows}'CLIPSDynamic32'{$endif};
-
-{$ENDIF}
+function __CreateEnvironment(): pcsize_t; cdecl; external CLIPS_DYNAMIC_LIB;
+procedure __DestroyEnvironment(env: pcsize_t); cdecl; external CLIPS_DYNAMIC_LIB;
+procedure __EnvClear(env: pcsize_t); cdecl; external CLIPS_DYNAMIC_LIB;
+procedure __EnvReset(env: pcsize_t); cdecl; external CLIPS_DYNAMIC_LIB;
+function __EnvRun(env: pcsize_t; run: clonglong): clonglong; cdecl;
+  external CLIPS_DYNAMIC_LIB;
+function __EnvBuild(env: pcsize_t; benv: PChar): cint; cdecl; external CLIPS_DYNAMIC_LIB;
 
 implementation
+
 end.

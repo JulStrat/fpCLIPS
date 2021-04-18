@@ -1,25 +1,36 @@
 unit CLIPS;
 
+{$IF Defined(FPC)}
+{$MODE Delphi}
+{$PACKRECORDS C}
+{$ENDIF}
+
 interface
 
-uses
-  ctypes;
-
 const
-{$IFDEF WIN32}
-  CLIPS_DYNAMIC_LIB = 'CLIPSDynamic32';
-{$ENDIF}
-{$IFDEF WIN64}
-  CLIPS_DYNAMIC_LIB = 'CLIPSDynamic64';
-{$ENDIF}
+  CLIPS_VERSION = '6.4';
+  CLIPS_DYNAMIC_LIB = 'CLIPSDLL';
 
-function __CreateEnvironment(): pcsize_t; cdecl; external CLIPS_DYNAMIC_LIB;
-procedure __DestroyEnvironment(env: pcsize_t); cdecl; external CLIPS_DYNAMIC_LIB;
-procedure __EnvClear(env: pcsize_t); cdecl; external CLIPS_DYNAMIC_LIB;
-procedure __EnvReset(env: pcsize_t); cdecl; external CLIPS_DYNAMIC_LIB;
-function __EnvRun(env: pcsize_t; run: clonglong): clonglong; cdecl;
-  external CLIPS_DYNAMIC_LIB;
-function __EnvBuild(env: pcsize_t; benv: PChar): cint; cdecl; external CLIPS_DYNAMIC_LIB;
+function __CreateEnvironment(): Pointer;
+  cdecl; external CLIPS_DYNAMIC_LIB;
+
+procedure __DestroyEnvironment(env: Pointer);
+  cdecl; external CLIPS_DYNAMIC_LIB;
+
+function  __Load(env: Pointer; benv: PAnsiChar): Integer;
+  cdecl; external CLIPS_DYNAMIC_LIB;
+
+procedure __Clear(env: Pointer);
+  cdecl; external CLIPS_DYNAMIC_LIB;
+
+procedure __Reset(env: Pointer);
+  cdecl; external CLIPS_DYNAMIC_LIB;
+
+function __Run(env: Pointer; run: Int64): Int64;
+  cdecl; external CLIPS_DYNAMIC_LIB;
+
+function __Build(env: Pointer; benv: PAnsiChar): Integer;
+  cdecl; external CLIPS_DYNAMIC_LIB;
 
 implementation
 
